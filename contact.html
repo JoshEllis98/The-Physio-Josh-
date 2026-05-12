@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact & Book — The Physio Josh</title>
+  <meta name="description" content="Book a home physiotherapy appointment with The Physio Josh. Contact form, calendar booking, and contact details.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-content">
+      <a href="index.html" class="nav-logo">
+        <div class="logo-icon">⚕</div>
+        The Physio Josh
+      </a>
+      <div class="nav-links" id="navLinks">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="services.html">Services</a>
+        <a href="faq.html">FAQ</a>
+        <a href="resources.html">Resources</a>
+        <a href="contact.html" class="btn btn-primary btn-sm active">Book Now</a>
+      </div>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Page Header -->
+  <section class="page-header">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="index.html">Home</a> <span>/</span> <span>Contact</span>
+      </div>
+      <h1>Book an Appointment</h1>
+      <p>Choose a date and time, then fill in your details. I'll confirm your appointment within 24 hours.</p>
+    </div>
+  </section>
+
+  <!-- Unified Booking Flow -->
+  <section class="section">
+    <div class="container">
+      <div class="contact-grid">
+
+        <!-- Left: Step-by-step booking -->
+        <div>
+          <div class="booking-flow" id="bookingFlow">
+
+            <!-- Step 1: Choose a Date -->
+            <div class="booking-step active" id="step1" data-step="1">
+              <div class="booking-step-header">
+                <div class="booking-step-number">1</div>
+                <div class="booking-step-title">Choose a Date</div>
+                <div class="booking-step-summary" id="step1Summary"></div>
+              </div>
+              <div class="booking-step-body">
+                <div class="calendar-widget" id="calendarWidget">
+                  <div class="calendar-header">
+                    <div class="calendar-nav">
+                      <button id="calendarPrev" aria-label="Previous month">‹</button>
+                    </div>
+                    <h3 id="calendarTitle">April 2026</h3>
+                    <div class="calendar-nav">
+                      <button id="calendarNext" aria-label="Next month">›</button>
+                    </div>
+                  </div>
+                  <div class="calendar-days-header">
+                    <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+                  </div>
+                  <div class="calendar-grid" id="calendarGrid"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 2: Choose a Time -->
+            <div class="booking-step" id="step2" data-step="2">
+              <div class="booking-step-header">
+                <div class="booking-step-number">2</div>
+                <div class="booking-step-title">Choose a Time</div>
+                <div class="booking-step-summary" id="step2Summary"></div>
+              </div>
+              <div class="booking-step-body">
+                <div class="booking-selected-info" id="selectedDateDisplay">
+                  <span id="selectedDateText"></span>
+                  <button class="change-btn" id="changeDateBtn">Change</button>
+                </div>
+                <div class="time-slots-grid" id="timeSlotsGrid"></div>
+              </div>
+            </div>
+
+            <!-- Step 3: Your Details -->
+            <div class="booking-step" id="step3" data-step="3">
+              <div class="booking-step-header">
+                <div class="booking-step-number">3</div>
+                <div class="booking-step-title">Your Details</div>
+              </div>
+              <div class="booking-step-body">
+                <div class="booking-selected-info" id="selectedSlotDisplay">
+                  <span id="selectedSlotText"></span>
+                  <button class="change-btn" id="changeTimeBtn">Change</button>
+                </div>
+                <form id="contactForm">
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label for="firstName">First Name *</label>
+                      <input type="text" id="firstName" name="firstName" required placeholder="Your first name">
+                    </div>
+                    <div class="form-group">
+                      <label for="lastName">Last Name *</label>
+                      <input type="text" id="lastName" name="lastName" required placeholder="Your last name">
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label for="email">Email *</label>
+                      <input type="email" id="email" name="email" required placeholder="your@email.com">
+                    </div>
+                    <div class="form-group">
+                      <label for="phone">Phone</label>
+                      <input type="tel" id="phone" name="phone" placeholder="07xxx xxx xxx">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="service">What do you need help with?</label>
+                    <select id="service" name="service">
+                      <option value="">Select a service...</option>
+                      <option value="msk">Musculoskeletal / Sports Injury</option>
+                      <option value="elderly">Elderly Care / Falls Prevention</option>
+                      <option value="postop">Post-Operative Rehabilitation</option>
+                      <option value="other">Other / Not Sure</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="message">Tell me about your condition *</label>
+                    <textarea id="message" name="message" required placeholder="Briefly describe your symptoms, how long you've had them, and what you'd like to achieve..."></textarea>
+                  </div>
+                  <div class="form-group-checkbox">
+                    <input type="checkbox" id="consent" name="consent" required>
+                    <label for="consent">I consent to The Physio Josh storing my details to process this booking request. See my <a href="privacy.html">Privacy Policy</a>.</label>
+                  </div>
+                  <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">Submit Booking Request →</button>
+                </form>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Success Message -->
+          <div class="form-success" id="formSuccess">
+            <h3 style="margin-bottom: 8px; color: var(--primary-dark);">Booking Request Sent!</h3>
+            <p style="margin: 0;">Thank you — I'll review your request and confirm your appointment within 24 hours via email.</p>
+          </div>
+        </div>
+
+        <!-- Right: Contact Info & Map -->
+        <div>
+          <div class="contact-info-card">
+            <h3 style="margin-bottom: 16px;">Contact Details</h3>
+            <div class="contact-info-item">
+              <div class="info-icon">📞</div>
+              <div>
+                <h4>Phone</h4>
+                <p>07XXX XXX XXX</p>
+              </div>
+            </div>
+            <div class="contact-info-item">
+              <div class="info-icon">✉️</div>
+              <div>
+                <h4>Email</h4>
+                <p>josh@thephysiojosh.co.uk</p>
+              </div>
+            </div>
+            <div class="contact-info-item">
+              <div class="info-icon">⏰</div>
+              <div>
+                <h4>Availability</h4>
+                <p>Mon – Fri: 8am – 7pm<br>Sat: 9am – 2pm<br>Sun: Closed</p>
+              </div>
+            </div>
+            <div class="contact-info-item">
+              <div class="info-icon">📍</div>
+              <div>
+                <h4>Service Area</h4>
+                <p>Based in Coggeshall, covering Colchester, Witham, Braintree, Halstead, Kelvedon, Tiptree & Earls Colne.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Service Area Map -->
+          <div class="mt-4" style="border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border);">
+            <div id="serviceMap" style="height: 360px; width: 100%;"></div>
+            <div style="padding: 12px 16px; background: var(--off-white); font-size: 0.8rem; color: var(--text-light); text-align: center;">
+              📍 Based in Coggeshall · Covering Colchester, Witham, Braintree, Halstead, Kelvedon, Tiptree & Earls Colne
+            </div>
+          </div>
+
+          <!-- Prefer to just message? -->
+          <div class="contact-info-card mt-4">
+            <h3 style="margin-bottom: 8px;">Prefer to just send a message?</h3>
+            <p style="color: var(--text-light); font-size: 0.9rem; margin-bottom: 0;">If you'd rather not pick a date right now, just call or email me directly using the details above and we'll arrange a time that works.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="nav-logo">
+            <div class="logo-icon">⚕</div>
+            The Physio Josh
+          </a>
+          <p>Professional home-based physiotherapy delivering expert, personalised care to your doorstep. Fully qualified, insured, and HCPC registered.</p>
+        </div>
+        <div>
+          <h4>Quick Links</h4>
+          <ul class="footer-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Services</h4>
+          <ul class="footer-links">
+            <li><a href="services.html">Musculoskeletal</a></li>
+            <li><a href="services.html">Sports Injuries</a></li>
+            <li><a href="services.html">Elderly Care</a></li>
+            <li><a href="services.html">Post-Op Rehab</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Legal</h4>
+          <ul class="footer-links">
+            <li><a href="privacy.html">Privacy Policy</a></li>
+            <li><a href="privacy.html">Terms & Conditions</a></li>
+            <li><a href="faq.html">FAQ</a></li>
+            <li><a href="contact.html">Book Online</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 The Physio Josh. All rights reserved.</p>
+        <p><a href="privacy.html">Privacy Policy</a> · HCPC Registered Physiotherapist</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    // --- Service Area Map ---
+    (function() {
+      const mapEl = document.getElementById('serviceMap');
+      if (!mapEl) return;
+
+      // Centre on Coggeshall
+      const coggeshall = [51.8725, 0.6870];
+
+      const map = L.map('serviceMap', {
+        center: coggeshall,
+        zoom: 11,
+        scrollWheelZoom: false,
+        zoomControl: true
+      });
+
+      // Tile layer — clean, light style
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        maxZoom: 16
+      }).addTo(map);
+
+      // Town coordinates
+      const towns = {
+        'Coggeshall':  [51.8725, 0.6870],
+        'Colchester':  [51.8891, 0.9037],
+        'Witham':      [51.7965, 0.6380],
+        'Halstead':    [51.9450, 0.6400],
+        'Braintree':   [51.8783, 0.5553],
+        'Kelvedon':    [51.8399, 0.7050],
+        'Tiptree':     [51.8126, 0.7434],
+        'Earls Colne': [51.9234, 0.7018]
+      };
+
+      // Service area polygon — convex hull around all towns with padding
+      const serviceArea = [
+        [51.77,  0.52],   // SW — below Witham / west of Braintree
+        [51.77,  0.78],   // S — below Tiptree
+        [51.80,  0.95],   // SE — east of Tiptree toward Colchester
+        [51.88,  0.97],   // E — east of Colchester
+        [51.94,  0.96],   // NE — north of Colchester
+        [51.99,  0.76],   // N — above Earls Colne
+        [51.99,  0.60],   // NW — above Halstead
+        [51.93,  0.48],   // W — west of Braintree
+      ];
+
+      // Draw service area polygon
+      L.polygon(serviceArea, {
+        color: '#e63946',
+        weight: 2.5,
+        opacity: 0.8,
+        fillColor: '#e63946',
+        fillOpacity: 0.12,
+        dashArray: '6, 4'
+      }).addTo(map);
+
+      // Home base marker (Coggeshall) — custom teal icon
+      const homeIcon = L.divIcon({
+        html: '<div style="background:#005F73;color:#fff;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;box-shadow:0 2px 8px rgba(0,0,0,0.3);border:3px solid #fff;">🏠</div>',
+        className: '',
+        iconSize: [36, 36],
+        iconAnchor: [18, 18]
+      });
+
+      L.marker(coggeshall, { icon: homeIcon })
+        .addTo(map)
+        .bindPopup('<strong>The Physio Josh</strong><br>Based in Coggeshall');
+
+      // Town markers
+      const townIcon = L.divIcon({
+        html: '<div style="background:#0A9396;color:#fff;width:10px;height:10px;border-radius:50%;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,0.3);"></div>',
+        className: '',
+        iconSize: [10, 10],
+        iconAnchor: [5, 5]
+      });
+
+      Object.entries(towns).forEach(([name, coords]) => {
+        if (name === 'Coggeshall') return; // Already has home marker
+        L.marker(coords, { icon: townIcon })
+          .addTo(map)
+          .bindTooltip(name, {
+            permanent: true,
+            direction: 'top',
+            offset: [0, -8],
+            className: 'town-label'
+          });
+      });
+
+      // Enable scroll zoom after first click
+      map.once('click', function() {
+        map.scrollWheelZoom.enable();
+      });
+    })();
+  </script>
+  <style>
+    .town-label {
+      background: rgba(255,255,255,0.92) !important;
+      border: 1px solid #ccc !important;
+      border-radius: 4px !important;
+      padding: 2px 8px !important;
+      font-size: 11px !important;
+      font-weight: 600 !important;
+      color: #001219 !important;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1) !important;
+      font-family: 'Inter', sans-serif !important;
+    }
+    .town-label::before {
+      display: none !important;
+    }
+    .leaflet-control-attribution {
+      font-size: 10px !important;
+    }
+  </style>
+</body>
+</html>
