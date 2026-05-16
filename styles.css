@@ -359,22 +359,11 @@ p { margin-bottom: 1rem; }
   box-shadow: var(--shadow-lg);
 }
 
-.hero-image-wrapper .placeholder-graphic {
+.hero-photo {
   width: 100%;
   height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  color: rgba(255,255,255,0.9);
-  font-size: 4rem;
-  gap: 16px;
-}
-
-.hero-image-wrapper .placeholder-graphic span {
-  font-size: 1rem;
-  font-weight: 500;
-  opacity: 0.8;
+  object-fit: cover;
+  object-position: center top;
 }
 
 .hero-float-card {
@@ -1222,13 +1211,14 @@ p { margin-bottom: 1rem; }
   border-radius: var(--radius);
   overflow: hidden;
   aspect-ratio: 3/4;
-  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: rgba(255,255,255,0.85);
-  font-size: 4rem;
   box-shadow: var(--shadow-lg);
+}
+
+.about-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
 }
 
 .about-text h2 {
